@@ -1,4 +1,4 @@
-package backend_project.demo;
+package backend_project.demo.model;
 
 public record Recipe(
         Long id,
