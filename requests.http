@@ -1,7 +1,3 @@
-# Запросы для демонстрации. В VS Code нужно расширение REST Client, в JetBrains IDE всё встроено.
-# Над каждым запросом появляется ссылка «Send Request».
-# items заменить на свой ресурс, тела на поля своей сущности.
-
 @base = http://localhost:8080
 
 ### Сервис жив?
@@ -22,28 +18,33 @@ Content-Type: application/json
 GET {{base}}/api/recipes?author=someone
 
 ### Получить одну запись
-GET {{base}}/api/recipes/6
+GET {{base}}/api/recipes/1
 
 ### Изменить
-PATCH {{base}}/api/items/1
+PUT {{base}}/api/recipes/1
 Content-Type: application/json
 
-{ "title": "Изменённая запись" }
+{ 
+    "title": "meow",
+    "author": "someone",
+    "cookingTimeMinutes": 100,
+    "servings": 2 
+}
 
 ### Удалить
-DELETE {{base}}/api/items/1
+DELETE {{base}}/api/recipes/1
 
-### После удаления должен быть 404
-GET {{base}}/api/items/1
+### После удаления - 404
+GET {{base}}/api/recipes/1
 
-### Сломанный JSON, должен быть 400
-POST {{base}}/api/items
+### Сломанный JSON, 400
+POST {{base}}/api/recipes
 Content-Type: application/json
 
 { "title":
 
-### Пустое обязательное поле, должен быть 400
-POST {{base}}/api/items
+### Пустое обязательное поле, 400
+POST {{base}}/api/recipes
 Content-Type: application/json
 
 { "title": "" }
