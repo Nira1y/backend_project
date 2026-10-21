@@ -50,5 +50,19 @@ public class RecipeBookService {
         recipeBook.put(newRecipe.id(), newRecipe);
         return newRecipe;
     }
+    public Recipe updateRecipe (Long id, Recipe recipe){
+        if (!recipeBook.containsKey(id)){
+            return null;
+        }
+        Recipe updatedRecipe = new Recipe(
+            id,
+            recipe.title(),
+            recipe.author(),
+            recipe.cookingTimeMinutes(),
+            recipe.servings()
+        );
+        recipeBook.put(id, updatedRecipe);
+        return updatedRecipe;
+    }
 
 }

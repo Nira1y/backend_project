@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,6 +54,22 @@ public class RecipeBookController {
         @RequestParam(required = false) Integer offset,
         @RequestParam(required = false) String author) {
         return recipeBookService.getAllRecipes(limit, offset, author);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequest recipeRequest){
+        Recipe recipeToUpdate = new Recipe(
+            id,
+            recipeRequest.title(),
+            recipeRequest.author(),
+            recipeRequest.cookingTimeMinutes(),
+            recipeRequest.servings()
+        );
+
+        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeToUpdate);
+        if(updatedRecipe == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedRecipe);
     }
 }
 
