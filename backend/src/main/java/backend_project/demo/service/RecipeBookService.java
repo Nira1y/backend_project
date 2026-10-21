@@ -50,6 +50,7 @@ public class RecipeBookService {
         recipeBook.put(newRecipe.id(), newRecipe);
         return newRecipe;
     }
+
     public Recipe updateRecipe (Long id, Recipe recipe){
         if (!recipeBook.containsKey(id)){
             return null;
@@ -64,5 +65,8 @@ public class RecipeBookService {
         recipeBook.put(id, updatedRecipe);
         return updatedRecipe;
     }
-
+    
+    public boolean deleteRecipe(Long id){
+        return recipeBook.remove(id) != null;
+    }
 }
