@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Список
-GET {{base}}/api/items
+GET {{base}}/api/recipes?author=someone
 
 ### Получить одну запись
 GET {{base}}/api/recipes/6
