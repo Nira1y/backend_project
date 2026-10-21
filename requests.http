@@ -8,16 +8,21 @@
 GET {{base}}/health
 
 ### Создать
-POST {{base}}/api/items
+POST {{base}}/api/recipes
 Content-Type: application/json
 
-{ "title": "Первая запись" }
+{   
+    "title": "someting",
+    "author": "someone",
+    "cookingTimeMinutes": 60,
+    "servings": 4
+}
 
 ### Список
 GET {{base}}/api/items
 
 ### Получить одну запись
-GET {{base}}/api/items/1
+GET {{base}}/api/recipes/6
 
 ### Изменить
 PATCH {{base}}/api/items/1
