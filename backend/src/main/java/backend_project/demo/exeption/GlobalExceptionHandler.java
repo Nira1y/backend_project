@@ -10,8 +10,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 @RestControllerAdvice 
 public class GlobalExceptionHandler {
+    @Hidden
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExeptions(MethodArgumentNotValidException ex){
         FieldError fieldError = ex.getBindingResult().getFieldError();
@@ -23,7 +26,8 @@ public class GlobalExceptionHandler {
             "field", fieldName)
         );
     }
-
+    
+    @Hidden
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> handleBrokenJson(HttpMessageNotReadableException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
