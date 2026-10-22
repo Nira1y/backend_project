@@ -15,7 +15,7 @@ public record RecipeRequest (
     @Min(value = 1, message = "cookingTimeMinutes need to be more than 0")
     Integer cookingTimeMinutes,
 
-    @NotNull(message = "serving can't be null")
-    @Min(value = 1, message = "serving need to be more than 0")
+    @NotNull(message = "servings can't be null")
+    @Min(value = 1, message = "servings need to be more than 0")
     Integer servings
 ) {}
