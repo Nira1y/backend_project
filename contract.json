@@ -1,10 +1,21 @@
 {
-  "base_url": "http://localhost:8000",
-  "resource": "items",
+  "base_url": "http://localhost:8080",
+  "resource": "recipes",
   "id_field": "id",
   "missing_id": "999999",
   "list_key": null,
-  "create": { "title": "Первая запись" },
-  "update": { "title": "Изменённая запись" },
-  "required_field": "title"
+  "create": { "title": "Пирожки", "author": "кто-то", "cookingTimeMinutes": 60, "servings": 10 },
+  "update": { "title": "Пирожки с повидлом", "author": "кто-то","cookingTimeMinutes": 60, "servings": 7 },
+  "required_field": "title",
+  "errors": [
+    { "body": { "title": "" }, "field": "title" },
+    { "body": { "author": "" }, "field": "author" },
+    { "body": { "cookingTimeMinutes": -1 }, "field": "cookingTimeMinutes" },
+    { "body": { "servings": -1 }, "field": "servings" }
+  ],
+  "filter": {
+    "param": "author",
+    "value": "Бабушка",
+    "other": "Пушкин"
+  }
 }
