@@ -38,14 +38,7 @@ public class RecipeBookController {
 
     @PostMapping()
     public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
-        Recipe recipe = new Recipe(
-            null, 
-            recipeRequest.title(), 
-            recipeRequest.author(),
-            recipeRequest.cookingTimeMinutes(),
-            recipeRequest.servings()
-        );
-        Recipe newRecipe = recipeBookService.createRecipe(recipe);
+        Recipe newRecipe = recipeBookService.createRecipe(recipeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRecipe);
     }
 
@@ -58,15 +51,8 @@ public class RecipeBookController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequest recipeRequest){
-        Recipe recipeToUpdate = new Recipe(
-            id,
-            recipeRequest.title(),
-            recipeRequest.author(),
-            recipeRequest.cookingTimeMinutes(),
-            recipeRequest.servings()
-        );
 
-        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeToUpdate);
+        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeRequest);
         if(updatedRecipe == null){
             return ResponseEntity.notFound().build();
         }

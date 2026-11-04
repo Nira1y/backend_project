@@ -1,4 +1,4 @@
-package backend_project.demo.exeption;
+package backend_project.demo.exception;
 
 import java.util.Map;
 
