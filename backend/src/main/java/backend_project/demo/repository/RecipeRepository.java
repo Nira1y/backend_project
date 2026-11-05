@@ -10,6 +10,7 @@ import backend_project.demo.model.RecipeEntity;
 
 public interface RecipeRepository extends JpaRepository<RecipeEntity, Long> {
     List<RecipeEntity> findByAuthor(String author);
+    List<RecipeEntity> findByTitleContainingIgnoreCase(String title);
     @EntityGraph(attributePaths = {"ingredients"})
     List<RecipeEntity> findAll();
     @EntityGraph(attributePaths = {"ingredients"})

@@ -46,8 +46,9 @@ public class RecipeBookController {
     public List<Recipe> getAllRecipes(
         @RequestParam(required = false) Integer limit,
         @RequestParam(required = false) Integer offset,
-        @RequestParam(required = false) String author) {
-        return recipeBookService.getAllRecipes(limit, offset, author);
+        @RequestParam(required = false) String author,
+        @RequestParam(required = false) String q) {
+        return recipeBookService.getAllRecipes(limit, offset, author, q);
     }
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequest recipeRequest){

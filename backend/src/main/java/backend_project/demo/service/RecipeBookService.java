@@ -27,14 +27,20 @@ public class RecipeBookService {
                 .orElse(null);
     }
 
-    public List<Recipe> getAllRecipes(Integer limit, Integer offset, String author){
+    public List<Recipe> getAllRecipes(Integer limit, Integer offset, String author, String q){
         List<RecipeEntity> entities;
-        if(author != null && !author.isBlank()){
+
+        if (q != null && !q.isBlank()){
+        entities = recipeRepository.findByTitleContainingIgnoreCase(q);
+        } 
+
+        else if(author != null && !author.isBlank()){
             entities = recipeRepository.findByAuthor(author);
         }
         else{
             entities = recipeRepository.findAll();
         }
+        
         List<Recipe> recipes = entities.stream()
                 .map(recipeMapper::toDTO)
                 .toList();
@@ -59,7 +65,7 @@ public class RecipeBookService {
                 existingEntity.setAuthor(request.author());
                 existingEntity.setCookingTimeMinutes(request.cookingTimeMinutes());
                 existingEntity.setServings(request.servings());
-                
+
                 RecipeEntity saved = recipeRepository.save(existingEntity);
                 return recipeMapper.toDTO(saved);
             })
