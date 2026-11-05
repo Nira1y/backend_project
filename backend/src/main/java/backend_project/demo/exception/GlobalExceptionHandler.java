@@ -45,4 +45,12 @@ public class GlobalExceptionHandler {
             "field", ex.getName() 
         ));
     }
+    @Hidden
+    @ExceptionHandler(DuplicateIngredientException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicateIngredient(DuplicateIngredientException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+            "error", ex.getMessage(),
+            "field", "name"
+        ));
+    }
 }
