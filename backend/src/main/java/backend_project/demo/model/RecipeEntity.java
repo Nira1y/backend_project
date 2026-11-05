@@ -1,4 +1,7 @@
 package backend_project.demo.model;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Table(name = "recipes")
@@ -20,6 +23,9 @@ public class RecipeEntity {
 
     @Column(name = "servings")
     private Integer servings;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<IngredientEntity> ingredients = new ArrayList<>();
     
     public RecipeEntity() {
     }
@@ -62,5 +68,13 @@ public class RecipeEntity {
     }
     public void setServings(Integer servings) {
         this.servings = servings;
+    }
+
+    public List<IngredientEntity> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<IngredientEntity> ingredients) {
+        this.ingredients = ingredients;
     }
 }
