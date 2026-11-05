@@ -1,6 +1,7 @@
 package backend_project.demo.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class IngredientService {
     @Transactional 
     public Ingredient addIngredient(Long recipeId, IngredientRequest request){
         RecipeEntity recipe = recipeRepository.findById(recipeId)
-            .orElseThrow(() -> new RuntimeException("Recipe not found"));
+            .orElseThrow(() -> new NoSuchElementException("Recipe with id " + recipeId + " not found"));;
         if(ingredientRepository.existsByRecipeIdAndNameIgnoreCase(recipeId, request.name())){
             throw new DuplicateIngredientException("Ingredient with name '" + request.name() + "' already exists in this recipe");
         }
@@ -38,10 +39,10 @@ public class IngredientService {
         IngredientEntity saved = ingredientRepository.save(entity);
         return ingredientMapper.toDTO(saved);
     }
-    
+
     public List<Ingredient> getIngredientsByRecipeId(Long recipeId) {
         if (!recipeRepository.existsById(recipeId)) {
-            throw new RuntimeException("Recipe not found");
+            throw new NoSuchElementException("Recipe with id " + recipeId + " not found");
         }
         
         return ingredientRepository.findByRecipeId(recipeId).stream()

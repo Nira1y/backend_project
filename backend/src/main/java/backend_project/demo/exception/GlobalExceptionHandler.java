@@ -1,6 +1,7 @@
 package backend_project.demo.exception;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
             "error", ex.getMessage(),
             "field", "name"
+        ));
+    }
+    @Hidden
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(NoSuchElementException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+            "error", ex.getMessage(),
+            "field", "recipe_id"
         ));
     }
 }
