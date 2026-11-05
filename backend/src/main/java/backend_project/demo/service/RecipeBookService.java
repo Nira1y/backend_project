@@ -59,7 +59,9 @@ public class RecipeBookService {
                 existingEntity.setAuthor(request.author());
                 existingEntity.setCookingTimeMinutes(request.cookingTimeMinutes());
                 existingEntity.setServings(request.servings());
-                return recipeMapper.toDTO(recipeRepository.save(existingEntity));
+                
+                RecipeEntity saved = recipeRepository.save(existingEntity);
+                return recipeMapper.toDTO(saved);
             })
             .orElse(null);
     }
