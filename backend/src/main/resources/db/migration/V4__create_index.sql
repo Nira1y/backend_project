@@ -1,0 +1,1 @@
+CREATE INDEX idx_recipes_title_lower ON recipes (LOWER(title));
