@@ -57,7 +57,7 @@ erDiagram
         bigint id PK
         bigint recipe_id FK
         varchar name
-        double precision quantity
+        float quantity
         integer calories
     }
 ```
