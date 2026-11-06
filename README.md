@@ -61,7 +61,25 @@ erDiagram
         integer calories
     }
 ```
+## Индекс
+Создан индекс `idx_recipes_title_lower` на поле `title` без учета регистра (создается миграцией Flyway `V4__create_index.sql`).
 
+Запрос:
+```sql
+EXPLAIN ANALYZE SELECT * FROM recipes WHERE LOWER(title) = 'борщ';
+```
+Вывод:
+```text
+ Index Scan using idx_recipes_title_lower on recipes  (cost=0.13..8.15 rows=1 width=1048) (actual time=0.070..0.070 rows=1.00 loops=1)
+   Index Cond: (lower((title)::text) = 'борщ'::text)
+   Index Searches: 1
+   Buffers: shared hit=1 read=1
+ Planning:
+   Buffers: shared hit=8
+ Planning Time: 0.105 ms
+ Execution Time: 0.098 ms
+(8 rows)
+```
 ## Интерфейс
 
 <!-- С лабы 4: скриншот, например ![Интерфейс](docs/screenshot.png) -->
