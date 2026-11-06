@@ -6,7 +6,7 @@
 | | |
 | --- | --- |
 | Главная сущность | Рецепт(Recipe) |
-| Связанная сущность (1:N) | ... |
+| Связанная сущность (1:N) | Ингредиент(Ingredient) |
 | Фишка | ... |
 | Стек | Java 27, Spring Boot 4, Spring Web MVC, Hibernate Validator, Springdoc OpenAPI 3.1.0, Maven |
 
@@ -43,14 +43,22 @@ chmod +x mvnw
 
 ```mermaid
 erDiagram
-    parents ||--o{ children : "имеет"
-    parents {
-        int id PK
+    recipes ||--o{ ingredients : "содержит"
+    
+    recipes {
+        bigint id PK
         varchar title
+        varchar author
+        integer cooking_time_minutes
+        integer servings
     }
-    children {
-        int id PK
-        int parent_id FK
+    
+    ingredients {
+        bigint id PK
+        bigint recipe_id FK
+        varchar name
+        double precision quantity
+        integer calories
     }
 ```
 
