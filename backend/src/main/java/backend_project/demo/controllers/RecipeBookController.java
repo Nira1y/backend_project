@@ -1,5 +1,6 @@
 package backend_project.demo.controllers;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +70,11 @@ public class RecipeBookController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/stats")
+    public List<Map<String, Object>> getStats(){
+        return recipeBookService.getStats();
+    }
+
 }
 
