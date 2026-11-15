@@ -1,5 +1,6 @@
 package backend_project.demo.controllers;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +39,7 @@ public class RecipeBookController {
 
     @PostMapping()
     public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
-        Recipe recipe = new Recipe(
-            null, 
-            recipeRequest.title(), 
-            recipeRequest.author(),
-            recipeRequest.cookingTimeMinutes(),
-            recipeRequest.servings()
-        );
-        Recipe newRecipe = recipeBookService.createRecipe(recipe);
+        Recipe newRecipe = recipeBookService.createRecipe(recipeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRecipe);
     }
 
@@ -53,20 +47,14 @@ public class RecipeBookController {
     public List<Recipe> getAllRecipes(
         @RequestParam(required = false) Integer limit,
         @RequestParam(required = false) Integer offset,
-        @RequestParam(required = false) String author) {
-        return recipeBookService.getAllRecipes(limit, offset, author);
+        @RequestParam(required = false) String author,
+        @RequestParam(required = false) String q) {
+        return recipeBookService.getAllRecipes(limit, offset, author, q);
     }
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequest recipeRequest){
-        Recipe recipeToUpdate = new Recipe(
-            id,
-            recipeRequest.title(),
-            recipeRequest.author(),
-            recipeRequest.cookingTimeMinutes(),
-            recipeRequest.servings()
-        );
 
-        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeToUpdate);
+        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeRequest);
         if(updatedRecipe == null){
             return ResponseEntity.notFound().build();
         }
@@ -82,5 +70,11 @@ public class RecipeBookController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/stats")
+    public List<Map<String, Object>> getStats(){
+        return recipeBookService.getStats();
+    }
+
 }
 
