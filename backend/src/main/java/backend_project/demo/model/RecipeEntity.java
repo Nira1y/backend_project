@@ -26,16 +26,21 @@ public class RecipeEntity {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientEntity> ingredients = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private UserEntity owner;
     
     public RecipeEntity() {
     }
 
-    public RecipeEntity(Long id, String title, String author, Integer cookingTimeMinutes, Integer servings) {
+    public RecipeEntity(Long id, String title, String author, Integer cookingTimeMinutes, Integer servings, UserEntity owner) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.cookingTimeMinutes = cookingTimeMinutes;
         this.servings = servings;
+        this.owner = owner;
     }
     
     public Long getId() {
@@ -76,5 +81,13 @@ public class RecipeEntity {
 
     public void setIngredients(List<IngredientEntity> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public UserEntity getOwner(){
+        return owner;
+    }
+
+    public void setOwner(UserEntity owner){
+        this.owner = owner;
     }
 }

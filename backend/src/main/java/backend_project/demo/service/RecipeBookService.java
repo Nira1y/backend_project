@@ -4,25 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import backend_project.demo.dto.RecipeRequest;
 import backend_project.demo.mapper.RecipeMapper;
 import backend_project.demo.model.Recipe;
 import backend_project.demo.model.RecipeEntity;
+import backend_project.demo.model.UserEntity;
 import backend_project.demo.repository.IngredientRepository;
 import backend_project.demo.repository.RecipeRepository;
+import backend_project.demo.repository.UserRepository;
 
 @Service
 public class RecipeBookService {
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
+    private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
 
-    public RecipeBookService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientRepository ingredientRepository) {
+    public RecipeBookService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientRepository ingredientRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.ingredientRepository = ingredientRepository;
+        this.userRepository = userRepository;
     }
 
     public Recipe getRecipeById(Long id) {
@@ -57,7 +63,13 @@ public class RecipeBookService {
     } 
 
     public Recipe createRecipe(RecipeRequest request){
-        RecipeEntity entity = recipeMapper.toEntity(request);
+        // TODO: заменить на auth.getName(), пока заглушка
+        UserEntity owner = userRepository.findAll().stream().findFirst()
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "no users yet"));
+
+        RecipeEntity entity = recipeMapper.toEntity(request, owner);
         RecipeEntity savedEntity = recipeRepository.save(entity);
         return recipeMapper.toDTO(savedEntity);
     }

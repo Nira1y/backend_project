@@ -6,6 +6,7 @@ public record Recipe(
         Long id,
         String title,
         String author,
+        Long ownerId,
         Integer cookingTimeMinutes,
         Integer servings,
         List<Ingredient> ingredients
