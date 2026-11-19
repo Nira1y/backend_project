@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -62,21 +63,21 @@ public class RecipeBookService {
         return recipes.subList(start, end);
     } 
 
-    public Recipe createRecipe(RecipeRequest request){
-        // TODO: заменить на auth.getName(), пока заглушка
-        UserEntity owner = userRepository.findAll().stream().findFirst()
-            .orElseThrow(() -> new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "no users yet"));
-
+    public Recipe createRecipe(RecipeRequest request, Authentication auth){
+        UserEntity owner = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "user not found"));
         RecipeEntity entity = recipeMapper.toEntity(request, owner);
         RecipeEntity savedEntity = recipeRepository.save(entity);
         return recipeMapper.toDTO(savedEntity);
     }
 
-    public Recipe updateRecipe (Long id, RecipeRequest request){
+    public Recipe updateRecipe (Long id, RecipeRequest request, Authentication auth){
+
         return recipeRepository.findById(id)
             .map(existingEntity -> {
+                if (!existingEntity.getOwner().getUsername().equals(auth.getName())) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you are not the owner");
+                }
                 existingEntity.setTitle(request.title());
                 existingEntity.setAuthor(request.author());
                 existingEntity.setCookingTimeMinutes(request.cookingTimeMinutes());
@@ -88,14 +89,18 @@ public class RecipeBookService {
             .orElse(null);
     }
     
-    public boolean deleteRecipe(Long id){
+    public boolean deleteRecipe(Long id, Authentication auth){
         if (!recipeRepository.existsById(id)){
             return false;
         }
-        else{
-            recipeRepository.deleteById(id);
-            return true;
+
+        RecipeEntity existingEntity = recipeRepository.findById(id).orElseThrow();
+        if (!existingEntity.getOwner().getUsername().equals(auth.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you are not the owner");
         }
+        
+        recipeRepository.deleteById(id);
+        return true;
     }
 
     public List<Map<String, Object>> getStats(){
