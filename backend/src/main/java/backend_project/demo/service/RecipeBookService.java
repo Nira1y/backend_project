@@ -24,6 +24,7 @@ public class RecipeBookService {
     private final RecipeMapper recipeMapper;
     private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
+    
 
     public RecipeBookService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientRepository ingredientRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
