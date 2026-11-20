@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,8 +39,8 @@ public class RecipeBookController {
     }
 
     @PostMapping()
-    public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
-        Recipe newRecipe = recipeBookService.createRecipe(recipeRequest);
+    public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody RecipeRequest recipeRequest, Authentication auth) {
+        Recipe newRecipe = recipeBookService.createRecipe(recipeRequest, auth);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRecipe);
     }
 
@@ -52,9 +53,9 @@ public class RecipeBookController {
         return recipeBookService.getAllRecipes(limit, offset, author, q);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequest recipeRequest){
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequest recipeRequest, Authentication auth){
 
-        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeRequest);
+        Recipe updatedRecipe = recipeBookService.updateRecipe(id, recipeRequest, auth);
         if(updatedRecipe == null){
             return ResponseEntity.notFound().build();
         }
@@ -62,8 +63,8 @@ public class RecipeBookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id){
-        boolean deleted = recipeBookService.deleteRecipe(id);
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id, Authentication auth){
+        boolean deleted = recipeBookService.deleteRecipe(id, auth);
         if(!deleted){
 
             return ResponseEntity.notFound().build();
