@@ -71,13 +71,17 @@ public class RecipeBookService {
         return recipeMapper.toDTO(savedEntity);
     }
 
-    public Recipe updateRecipe (Long id, RecipeRequest request, Authentication auth){
-
+    public Recipe updateRecipe(Long id, RecipeRequest request, Authentication auth) {
         return recipeRepository.findById(id)
             .map(existingEntity -> {
-                if (!existingEntity.getOwner().getUsername().equals(auth.getName())) {
-                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you are not the owner");
+                boolean isOwner = existingEntity.getOwner().getUsername().equals(auth.getName());
+                boolean isAdmin = auth.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+                if (!isOwner && !isAdmin) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you are not the owner or admin");
                 }
+                
                 existingEntity.setTitle(request.title());
                 existingEntity.setAuthor(request.author());
                 existingEntity.setCookingTimeMinutes(request.cookingTimeMinutes());
